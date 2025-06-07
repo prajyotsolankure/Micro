@@ -1,0 +1,20 @@
+        AREA SQRT, CODE, READONLY
+        ENTRY
+
+        MOV     R0, #36         ; Input number (change this to your desired number)
+        MOV     R1, #1          ; Start checking from 1
+        MOV     R2, #0          ; Will hold the square result (R1 * R1)
+        MOV     R3, #0          ; Will hold the final answer
+
+LOOP
+        MUL     R2, R1, R1      ; R2 = R1 * R1
+        CMP     R2, R0          ; Compare R2 with input
+        BHI     DONE            ; If R2 > input, we're done
+        MOV     R3, R1          ; Store current R1 as potential answer
+        ADD     R1, R1, #1      ; Try next number
+        B       LOOP
+
+DONE
+        B       DONE            ; Infinite loop to end program
+
+        END
