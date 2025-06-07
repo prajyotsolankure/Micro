@@ -1,0 +1,37 @@
+        AREA DESCENDING, CODE, READONLY
+        ENTRY
+
+        MOV     R0, #05                  ; Outer loop counter = 5 (n-1 passes)
+        MOV     R5, #0x40000000          ; Base address of array in memory
+
+OUTERLOOP
+        ADD     R6, R5, #4               ; R6 = R5 + 4 (next element)
+        MOV     R3, #4                   ; Inner loop counter = n - i - 1
+
+INNERLOOP
+        LDR     R1, [R5]                 ; Load first element into R1
+        LDR     R2, [R6]                 ; Load second element into R2
+        CMP     R1, R2
+        BGE     NO_SWAP                  ; If R1 ≥ R2, no swap needed (descending order)
+
+        ; Swap R1 and R2
+        MOV     R4, R2
+        MOV     R2, R1
+        MOV     R1, R4
+
+NO_SWAP
+        STR     R1, [R5]                 ; Store R1 at current position
+        STR     R2, [R6]                 ; Store R2 at next position
+
+        ADD     R5, R5, #4               ; Move to next element
+        ADD     R6, R6, #4
+        SUBS    R3, R3, #1               ; Decrement inner loop counter
+        BNE     INNERLOOP                ; If not zero, repeat inner loop
+
+        SUBS    R0, R0, #1               ; Decrement outer loop counter
+        BNE     OUTERLOOP                ; Repeat outer loop if not zero
+
+STOP
+        B       STOP                     ; Infinite loop after sorting
+
+        END
