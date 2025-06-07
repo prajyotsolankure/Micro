@@ -1,0 +1,20 @@
+        AREA FACTORIAL, CODE, READONLY
+        ENTRY                   ; Mark first instruction to execute
+
+        MOV     R0, #7          ; Store factorial number in R0
+        MOV     R1, R0          ; Copy R0 to R1 (loop counter)
+
+FACT    SUBS    R1, R1, #1      ; R1 = R1 - 1, update flags
+        CMP     R1, #1          ; Compare R1 with 1
+        BEQ     STOP            ; If R1 == 1, stop
+
+        MUL     R3, R0, R1      ; R3 = R0 * R1
+        MOV     R0, R3          ; Store result back to R0
+
+        BNE     FACT            ; If R1 != 1, continue loop
+
+STOP    NOP                     ; No operation (padding or halt)
+        NOP
+        NOP
+
+        END                     ; End of program
