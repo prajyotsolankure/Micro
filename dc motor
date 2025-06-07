@@ -1,0 +1,44 @@
+#include <lpc214x.h>
+
+void clock_wise(void);
+void anti_clock_wise(void);
+void delay(unsigned int); // Separate delay function
+
+int main(void)
+{
+    PINSEL2 = 0x00000000;         // Set P1.16 & P1.17 as GPIO
+    IO1DIR  = 0x00030000;         // Set P1.16 and P1.17 as OUTPUT
+    IO1SET  = 0x00010000;         // Initially turn ON relay (P1.16 HIGH)
+
+    while (1)
+    {
+        clock_wise();
+        delay(500000);
+
+        anti_clock_wise();
+        delay(500000);
+    }
+}
+
+// Clockwise rotation: P1.16 = HIGH (Relay ON), P1.17 = HIGH (Direction)
+void clock_wise(void)
+{
+    IO1CLR = 0x00030000;          // Stop motor, clear both lines
+    delay(100000);                // Small delay before direction change
+    IO1SET = 0x00030000;          // Set P1.16 and P1.17 (CW rotation)
+}
+
+// Anti-clockwise: P1.16 = HIGH (Relay ON), P1.17 = LOW
+void anti_clock_wise(void)
+{
+    IO1CLR = 0x00030000;          // Stop motor, clear both lines
+    delay(100000);                // Small delay before direction change
+    IO1SET = 0x00010000;          // Set only P1.16 (Relay ON, Direction = 0)
+}
+
+// Delay function using empty loop
+void delay(unsigned int count)
+{
+    volatile unsigned int i;
+    for (i = 0; i < count; i++);
+}
