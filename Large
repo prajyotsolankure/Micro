@@ -1,0 +1,26 @@
+        AREA LAR_SMAL, READONLY
+        ENTRY                           ; Mark program entry point
+
+        MOV     R5, #06                 ; Loop counter for 6 comparisons (7 numbers)
+        MOV     R1, #0x40000000         ; Start address of the data array
+        MOV     R2, #0x4000001C         ; Address to store the result
+
+        LDR     R3, [R1]                ; Load first number into R3 as initial max
+
+LOOP    ADD     R1, R1, #04             ; Move to next number (word = 4 bytes)
+        LDR     R4, [R1]                ; Load the next number
+        CMP     R4, R3                  ; Compare new number with current max
+        BHI     UPDATE_MAX              ; If R4 > R3, update max
+        B       LOOP1                   ; Otherwise, skip update
+
+UPDATE_MAX
+        MOV     R3, R4                  ; Update max
+
+LOOP1   SUBS    R5, R5, #01             ; Decrement counter
+        CMP     R5, #00                 ; Check if done
+        BNE     LOOP                    ; Loop again if not done
+
+        STR     R3, [R2]                ; Store final max value in memory
+
+STOP    B       STOP                    ; Infinite loop to end program
+        END
