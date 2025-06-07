@@ -1,0 +1,12 @@
+        AREA SUM, CODE, READONLY
+        ENTRY                   ; Mark the entry point
+
+        MOV     R1, #10         ; R1 = counter (from 10 down to 1)
+        MOV     R2, #0          ; R2 = accumulator (sum)
+
+LOOP    ADD     R2, R2, R1      ; R2 = R2 + R1
+        SUBS    R1, R1, #1      ; R1 = R1 - 1, update flags
+        BNE     LOOP            ; If R1 ≠ 0, repeat loop
+
+STOP    B       STOP            ; Infinite loop to stop program
+        END
